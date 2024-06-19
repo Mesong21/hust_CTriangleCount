@@ -30,7 +30,7 @@ void edge_init(Edge *edge) {
 /**
  * 从目录中构建图
  */
-Graph *graph_from_dir(const char *dir) {
+Graph *graph_from_dir(const char *dir, bool print_all) {
   Graph *g = new Graph();
   graph_init(g);
   for (const auto &entry : fs::directory_iterator(dir)) {
@@ -65,9 +65,9 @@ Graph *graph_from_dir(const char *dir) {
 
         e->src_v = v1;
       } else {
-				g->vertex_list[id1]->nbr_set.insert(id2);
-				e->src_v = g->vertex_list[id1];
-			}
+        g->vertex_list[id1]->nbr_set.insert(id2);
+        e->src_v = g->vertex_list[id1];
+      }
       if (g->vertex_list.find(id2) == g->vertex_list.end()) {
         Vertex *v2 = new Vertex();
         vertex_init(v2);
@@ -79,9 +79,9 @@ Graph *graph_from_dir(const char *dir) {
 
         e->dst_v = v2;
       } else {
-				g->vertex_list[id2]->nbr_set.insert(id1);
-				e->dst_v = g->vertex_list[id2];
-			}
+        g->vertex_list[id2]->nbr_set.insert(id1);
+        e->dst_v = g->vertex_list[id2];
+      }
 
       // 加入边表
       if (g->edge_list.find(g->edge_num) == g->edge_list.end()) {
@@ -89,7 +89,12 @@ Graph *graph_from_dir(const char *dir) {
       }
     }
   }
-  print_graph(g);
+	if (print_all)
+  	print_graph(g);
+	else {
+
+	}
+  printf("图构建完成\n");
   return g;
 }
 
@@ -97,7 +102,7 @@ void print_graph(Graph *graph) {
   printf("顶点数：%lu 边数: %lu\n", graph->vertex_num, graph->edge_num);
   // 顶点信息
   for (auto &pair : graph->vertex_list) {
-		print_vertex(pair.second);
+    print_vertex(pair.second);
   }
   // 边信息
   for (auto &pair : graph->edge_list) {
@@ -105,7 +110,19 @@ void print_graph(Graph *graph) {
   }
 }
 
-void print_vertex(Vertex *vertex) {
+void print_vertex_list(
+    std::unordered_map<unsigned long, Vertex *> &vertex_list) {
+  for (auto &pair : vertex_list) {
+    print_vertex(pair.second);
+  }
+}
+void print_edge_list(std::unordered_map<unsigned long, Edge *> &edge_list) {
+	for (auto &pair : edge_list) {
+		print_edge(pair.second);
+	}
+}
+
+inline void print_vertex(Vertex *vertex) {
   printf("顶点id: %lu  ", vertex->id);
   printf("邻居数：%lu  ", vertex->nbr_set.size());
   for (auto &nbr : vertex->nbr_set) {
@@ -114,7 +131,7 @@ void print_vertex(Vertex *vertex) {
   printf("\n");
 }
 
-void print_edge(Edge *edge) {
+inline void print_edge(Edge *edge) {
   printf("边id: %lu ", edge->id);
   printf("src: %lu -> ", edge->src_v->id);
   printf("dst: %lu\n", edge->dst_v->id);
