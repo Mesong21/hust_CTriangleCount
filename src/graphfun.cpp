@@ -1,4 +1,4 @@
-#include "fun.h"
+#include "graphfun.h"
 
 #include <filesystem>
 #include <fstream>
@@ -74,9 +74,7 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
       add_vertexes_to_graph(id1, id2, e, g);  // 加入顶点表
     }
   }
-  print_graph(g, print_all);
-
-  printf("图构建完成\n");
+  // printf("图构建完成\n");
   return g;
 }
 
@@ -151,8 +149,7 @@ bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
 }
 
 void print_graph(Graph *graph, bool print_all) {
-  printf("顶点数：%lu 无向边数: %lu\n", graph->vertex_num, graph->edge_num);
-	printf("有向边数: %lu\n", graph->directed_edge_num);
+  printf("顶点数：%lu 无向边数: %lu 有向边数: %lu\n", graph->vertex_num, graph->edge_num, graph->directed_edge_num);
   // 顶点信息
   if (print_all) {
     for (auto &pair : graph->vertex_list) {

@@ -1,3 +1,6 @@
+#ifndef GRAPHFUN_H
+#define GRAPHFUN_H
+
 #include"graph.h"
 
 void graph_init(Graph *graph);
@@ -11,3 +14,6 @@ void print_graph(Graph *graph, bool print_all);
 void print_vertex(Vertex *vertex);
 void print_edge(Edge *edge);
 
+
+
+#endif
