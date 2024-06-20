@@ -34,14 +34,14 @@ int main(int argc, char **argv) {
   graph = graph_from_dir(dir, print_all);
   print_graph(graph, print_all);
   graph_t = clock();
-  printf("建图时间: %fms\n", (double)(graph_t - start_t) / CLOCKS_PER_SEC * 1000);
+  printf("建图时间: %fs\n", (double)(graph_t - start_t) / CLOCKS_PER_SEC);
 
 	// 计数
 	unsigned long tri_num = count_triangles(graph);
 	calc_t = clock();
-	printf("计算时间: %fms\n", (double)(calc_t - graph_t) / CLOCKS_PER_SEC * 1000);
+	// printf("计算时间: %fms\n", (double)(calc_t - graph_t) / CLOCKS_PER_SEC * 1000);
 	printf("三角形数量: %lu\n", tri_num);
-	
-	printf("总时间: %fms\n", (double)(calc_t - start_t) / CLOCKS_PER_SEC * 1000);
+
+	printf("总时间: %fs\n", (double)(calc_t - start_t) / CLOCKS_PER_SEC);
   return 0;
 }
