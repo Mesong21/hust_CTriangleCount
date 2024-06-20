@@ -31,14 +31,15 @@ void process_edges(Graph *graph,
 /**
  * 遍历每个边，计算两个顶点的交集大小，并发送给这两个顶点
  */
-void edges_to_vertexes(Graph *graph) {
+void edges_to_vertexes(Graph *graph, int tnum) {
+	
   std::vector<std::thread> threads;
   auto start = graph->edge_list.begin();
   auto end = graph->edge_list.end();
-  auto part_size = std::distance(start, end) / 16;
-  for (int i = 0; i < 16; ++i) {
+  auto part_size = std::distance(start, end) / tnum;
+  for (int i = 0; i < tnum; ++i) {
     auto part_end = std::next(start, part_size);
-    if (i == 15) {  // 最后一部分，包含所有剩余的边
+    if (i == tnum-1) {  // 最后一部分，包含所有剩余的边
       part_end = end;
     }
     threads.push_back(std::thread(process_edges, graph, start, part_end));
@@ -64,8 +65,8 @@ unsigned long add_vertexes(Graph *graph) {
   return total_num / 3;
 }
 
-unsigned long count_triangles(Graph *graph) {
-  edges_to_vertexes(graph);
+unsigned long count_triangles(Graph *graph, int tnum) {
+  edges_to_vertexes(graph, tnum);
   unsigned long tri_num;
   tri_num = add_vertexes(graph);
   return tri_num;
