@@ -6,7 +6,7 @@
 void graph_init(Graph *graph);
 void vertex_init(Vertex *vertex);
 void edge_init(Edge *edge);
-Graph *graph_from_dir(const char *dir, bool prnit_all);
+Graph *graph_from_dir(const char *dir, bool prnit_all, int tnum);
 void add_vertexes_to_graph(unsigned long id1, unsigned long id2, Edge *e, Graph *g);
 void add_vertex_to_graph(unsigned long id, Graph *g);
 bool find_edge(unsigned long id1, unsigned long id2, Graph *g);

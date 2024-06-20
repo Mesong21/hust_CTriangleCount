@@ -31,7 +31,7 @@ void edge_init(Edge *edge) {
 /**
  * 从目录中构建图
  */
-Graph *graph_from_dir(const char *dir, bool print_all) {
+Graph *graph_from_dir(const char *dir, bool print_all, int tnum) {
   Graph *g = new Graph();
   graph_init(g);
   for (const auto &entry : fs::directory_iterator(dir)) {

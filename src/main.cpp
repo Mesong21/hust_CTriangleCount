@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   struct timeval start_t, graph_t, calc_t;
   gettimeofday(&start_t, NULL);
   // 建图
-  graph = graph_from_dir(dir, print_all);
+  graph = graph_from_dir(dir, print_all, tnum);
   print_graph(graph, print_all);
   gettimeofday(&graph_t, NULL);
   double graph_time = (graph_t.tv_sec - start_t.tv_sec) +
