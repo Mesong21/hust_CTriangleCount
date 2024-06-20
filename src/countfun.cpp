@@ -28,8 +28,6 @@ void process_edges(Graph *graph,
   }
 }
 
-
-
 /**
  * 遍历每个边，计算两个顶点的交集大小，并发送给这两个顶点
  */
@@ -50,19 +48,8 @@ void edges_to_vertexes(Graph *graph) {
     th.join();
   }
 }
-unsigned long count_triangles(Graph *graph) {
-  clock_t start_t, edges_t, vertexes_t;
-  start_t = clock();
-  edges_to_vertexes(graph);
-  edges_t = clock();
-  printf("传播时间: %fs\n", (double)(edges_t - start_t) / CLOCKS_PER_SEC);
-  unsigned long tri_num;
 
-  tri_num = add_vertexes(graph);
-  vertexes_t = clock();
-  printf("计算时间: %fs\n", (double)(vertexes_t - edges_t) / CLOCKS_PER_SEC);
-  return tri_num;
-}
+
 unsigned long add_vertexes(Graph *graph) {
   unsigned long total_num = 0;
   for (auto &pair : graph->vertex_list) {
@@ -75,4 +62,11 @@ unsigned long add_vertexes(Graph *graph) {
     throw std::runtime_error("不是3的倍数!\n");
   }
   return total_num / 3;
+}
+
+unsigned long count_triangles(Graph *graph) {
+  edges_to_vertexes(graph);
+  unsigned long tri_num;
+  tri_num = add_vertexes(graph);
+  return tri_num;
 }
