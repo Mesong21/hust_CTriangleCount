@@ -52,13 +52,13 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
         add_vertex_to_graph(id1, g);
         continue;
       } else if (id1 > id2) {
-				printf("id1: %lu id2: %lu\n", id1, id2);
+        printf("id1: %lu id2: %lu\n", id1, id2);
         unsigned long tmp = id1;
         id1 = id2;
         id2 = tmp;
       }
-      // @assert id1 < id2
-      // 加入顶点表
+      // 确保id1 < id2
+
       if (find_edge(id1, id2, g)) {
         // 重复边,说明该边和两个顶点都已加入表中
         continue;
@@ -66,7 +66,7 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
       // 加入边表
       Edge *e = new Edge();
       edge_init(e);
-			g->edge_num++;
+      g->edge_num++;
       e->id = g->edge_num;  // 从1开始
       g->edge_list[g->edge_num] = e;
       add_vertexes_to_graph(id1, id2, e, g);  // 加入顶点表
@@ -74,8 +74,8 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
   }
   if (print_all)
     print_graph(g);
-  else {
-  }
+  else
+    ;
   printf("图构建完成\n");
   return g;
 }
@@ -131,8 +131,9 @@ void add_vertex_to_graph(unsigned long id, Graph *g) {
 
 /**
  * 查找边
- * 此时顶点表中已有id1, id2
- * 令id1<id2
+ * 不确保顶点表包含id1, id2
+ * 若包含id1, id2，则确保id1, id2的邻居列表包含对方
+ * 确保id1<id2
  */
 bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
   Vertex *v1;
@@ -140,7 +141,9 @@ bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
     return false;
   } else {
     v1 = g->vertex_list[id1];
-    if (v1->nbr_set.find(id2) == v1->nbr_set.end()) {
+    if (g->vertex_list.find(id2) == g->vertex_list.end()) {
+      return false;
+    } else if (v1->nbr_set.find(id2) == v1->nbr_set.end()) {
       return false;
     }
   }
@@ -148,7 +151,7 @@ bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
 }
 
 void print_graph(Graph *graph) {
-  printf("顶点数：%lu 边数: %lu\n", graph->vertex_num, graph->edge_num);
+  printf("顶点数：%lu 无向边数: %lu\n", graph->vertex_num, graph->edge_num);
   // 顶点信息
   for (auto &pair : graph->vertex_list) {
     print_vertex(pair.second);
