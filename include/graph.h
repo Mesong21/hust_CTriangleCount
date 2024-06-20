@@ -33,7 +33,8 @@ typedef std::unordered_map<unsigned long, Edge *> EdgeList;
 
 typedef struct Graph {
   unsigned long vertex_num;  // 顶点数
-  unsigned long edge_num;    // 边数
+  unsigned long edge_num;    // 无向边数
+	unsigned long directed_edge_num; // 有向边数
   VertexList vertex_list;    // 顶点列表
   EdgeList edge_list;        // 边列表
 } Graph;

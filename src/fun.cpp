@@ -14,6 +14,7 @@ namespace fs = std::filesystem;
 void graph_init(Graph *graph) {
   graph->vertex_num = 0;
   graph->edge_num = 0;
+	graph->directed_edge_num = 0;
 }
 void vertex_init(Vertex *vertex) {
   vertex->id = 0;
@@ -46,13 +47,14 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
         std::cout << id1 << id2;
         throw std::runtime_error("解析错误1\n");
       }
-
+			g->directed_edge_num++; // 包括自边，重复边等，只要检测到边就加入
+			
       if (id1 == id2) {
         // 自环,忽略该边
         add_vertex_to_graph(id1, g);
         continue;
       } else if (id1 > id2) {
-        printf("id1: %lu id2: %lu\n", id1, id2);
+        // printf("id1: %lu id2: %lu\n", id1, id2);
         unsigned long tmp = id1;
         id1 = id2;
         id2 = tmp;
@@ -72,10 +74,8 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
       add_vertexes_to_graph(id1, id2, e, g);  // 加入顶点表
     }
   }
-  if (print_all)
-    print_graph(g);
-  else
-    ;
+  print_graph(g, print_all);
+
   printf("图构建完成\n");
   return g;
 }
@@ -150,15 +150,18 @@ bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
   return true;
 }
 
-void print_graph(Graph *graph) {
+void print_graph(Graph *graph, bool print_all) {
   printf("顶点数：%lu 无向边数: %lu\n", graph->vertex_num, graph->edge_num);
+	printf("有向边数: %lu\n", graph->directed_edge_num);
   // 顶点信息
-  for (auto &pair : graph->vertex_list) {
-    print_vertex(pair.second);
-  }
-  // 边信息
-  for (auto &pair : graph->edge_list) {
-    print_edge(pair.second);
+  if (print_all) {
+    for (auto &pair : graph->vertex_list) {
+      print_vertex(pair.second);
+    }
+    // 边信息
+    for (auto &pair : graph->edge_list) {
+      print_edge(pair.second);
+    }
   }
 }
 
