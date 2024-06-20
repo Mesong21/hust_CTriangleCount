@@ -47,55 +47,104 @@ Graph *graph_from_dir(const char *dir, bool print_all) {
         throw std::runtime_error("解析错误1\n");
       }
 
-      // 设置边
+      if (id1 == id2) {
+        // 自环,忽略该边
+        add_vertex_to_graph(id1, g);
+        continue;
+      } else if (id1 > id2) {
+				printf("id1: %lu id2: %lu\n", id1, id2);
+        unsigned long tmp = id1;
+        id1 = id2;
+        id2 = tmp;
+      }
+      // @assert id1 < id2
+      // 加入顶点表
+      if (find_edge(id1, id2, g)) {
+        // 重复边,说明该边和两个顶点都已加入表中
+        continue;
+      }
+      // 加入边表
       Edge *e = new Edge();
       edge_init(e);
-      g->edge_num++;
+			g->edge_num++;
       e->id = g->edge_num;  // 从1开始
-
-      // 加入顶点表
-      if (g->vertex_list.find(id1) == g->vertex_list.end()) {
-        Vertex *v1 = new Vertex();
-        vertex_init(v1);
-        v1->id = id1;
-        v1->nbr_set.insert(id2);
-
-        g->vertex_list[id1] = v1;
-        g->vertex_num++;
-
-        e->src_v = v1;
-      } else {
-        g->vertex_list[id1]->nbr_set.insert(id2);
-        e->src_v = g->vertex_list[id1];
-      }
-      if (g->vertex_list.find(id2) == g->vertex_list.end()) {
-        Vertex *v2 = new Vertex();
-        vertex_init(v2);
-        v2->id = id2;
-        v2->nbr_set.insert(id1);
-
-        g->vertex_list[id2] = v2;
-        g->vertex_num++;
-
-        e->dst_v = v2;
-      } else {
-        g->vertex_list[id2]->nbr_set.insert(id1);
-        e->dst_v = g->vertex_list[id2];
-      }
-
-      // 加入边表
-      if (g->edge_list.find(g->edge_num) == g->edge_list.end()) {
-        g->edge_list[g->edge_num] = e;
-      }
+      g->edge_list[g->edge_num] = e;
+      add_vertexes_to_graph(id1, id2, e, g);  // 加入顶点表
     }
   }
-	if (print_all)
-  	print_graph(g);
-	else {
-
-	}
+  if (print_all)
+    print_graph(g);
+  else {
+  }
   printf("图构建完成\n");
   return g;
+}
+
+/**
+ * 添加两个顶点
+ */
+void add_vertexes_to_graph(unsigned long id1, unsigned long id2, Edge *e,
+                           Graph *g) {
+  if (g->vertex_list.find(id1) == g->vertex_list.end()) {
+    Vertex *v1 = new Vertex();
+    vertex_init(v1);
+    v1->id = id1;
+    v1->nbr_set.insert(id2);
+
+    g->vertex_list[id1] = v1;
+    g->vertex_num++;
+
+    e->src_v = v1;
+  } else {
+    g->vertex_list[id1]->nbr_set.insert(id2);
+    e->src_v = g->vertex_list[id1];
+  }
+  if (g->vertex_list.find(id2) == g->vertex_list.end()) {
+    Vertex *v2 = new Vertex();
+    vertex_init(v2);
+    v2->id = id2;
+    v2->nbr_set.insert(id1);
+
+    g->vertex_list[id2] = v2;
+    g->vertex_num++;
+
+    e->dst_v = v2;
+  } else {
+    g->vertex_list[id2]->nbr_set.insert(id1);
+    e->dst_v = g->vertex_list[id2];
+  }
+}
+
+/**
+ * 添加一个顶点
+ * 若为新顶点，不添加邻居
+ */
+void add_vertex_to_graph(unsigned long id, Graph *g) {
+  if (g->vertex_list.find(id) == g->vertex_list.end()) {
+    Vertex *v = new Vertex();
+    vertex_init(v);
+    v->id = id;
+    g->vertex_list[id] = v;
+    g->vertex_num++;
+  }
+}
+
+/**
+ * 查找边
+ * 此时顶点表中已有id1, id2
+ * 令id1<id2
+ */
+bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
+  Vertex *v1;
+  if (g->vertex_list.find(id1) == g->vertex_list.end()) {
+    return false;
+  } else {
+    v1 = g->vertex_list[id1];
+    if (v1->nbr_set.find(id2) == v1->nbr_set.end()) {
+      return false;
+    }
+  }
+  return true;
 }
 
 void print_graph(Graph *graph) {
@@ -117,9 +166,9 @@ void print_vertex_list(
   }
 }
 void print_edge_list(std::unordered_map<unsigned long, Edge *> &edge_list) {
-	for (auto &pair : edge_list) {
-		print_edge(pair.second);
-	}
+  for (auto &pair : edge_list) {
+    print_edge(pair.second);
+  }
 }
 
 inline void print_vertex(Vertex *vertex) {
