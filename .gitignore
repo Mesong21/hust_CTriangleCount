@@ -26,7 +26,7 @@
 
 # Generated files
 Makefile
-CMakeLists.txt
+
 cmake_install.cmake
 CMakeCache.txt
 build/
