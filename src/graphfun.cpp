@@ -60,7 +60,6 @@ Graph *graph_from_dir(const char *dir, bool print_all, int tnum) {
         id2 = tmp;
       }
       // 确保id1 < id2
-
       if (find_edge(id1, id2, g)) {
         // 重复边,说明该边和两个顶点都已加入表中
         continue;
@@ -88,10 +87,8 @@ void add_vertexes_to_graph(unsigned long id1, unsigned long id2, Edge *e,
     vertex_init(v1);
     v1->id = id1;
     v1->nbr_set.insert(id2);
-
     g->vertex_list[id1] = v1;
     g->vertex_num++;
-
     e->src_v = v1;
   } else {
     g->vertex_list[id1]->nbr_set.insert(id2);
@@ -102,10 +99,8 @@ void add_vertexes_to_graph(unsigned long id1, unsigned long id2, Edge *e,
     vertex_init(v2);
     v2->id = id2;
     v2->nbr_set.insert(id1);
-
     g->vertex_list[id2] = v2;
     g->vertex_num++;
-
     e->dst_v = v2;
   } else {
     g->vertex_list[id2]->nbr_set.insert(id1);
@@ -134,6 +129,8 @@ void add_vertex_to_graph(unsigned long id, Graph *g) {
  * 确保id1<id2
  */
 bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
+	if (id1 > id2) 
+		throw std::runtime_error("id1 > id2\n");
   Vertex *v1;
   if (g->vertex_list.find(id1) == g->vertex_list.end()) {
     return false;
@@ -149,7 +146,8 @@ bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
 }
 
 void print_graph(Graph *graph, bool print_all) {
-  printf("顶点数：%lu 无向边数: %lu 有向边数: %lu\n", graph->vertex_num, graph->edge_num, graph->directed_edge_num);
+  printf("顶点数：%lu 无向边数: %lu \n", graph->vertex_num, graph->edge_num);
+	// printf("有向边数: %lu\n", graph->directed_edge_num);
   // 顶点信息
   if (print_all) {
     for (auto &pair : graph->vertex_list) {

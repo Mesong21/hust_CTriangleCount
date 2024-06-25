@@ -37,16 +37,15 @@ int main(int argc, char **argv) {
   gettimeofday(&graph_t, NULL);
   double graph_time = (graph_t.tv_sec - start_t.tv_sec) +
                       (graph_t.tv_usec - start_t.tv_usec) / 1000000.0;
-  printf("建图时间: %fs\n", graph_time);
+  printf(" |建图时间: %fs\n", graph_time);
 
   // 计数
   unsigned long tri_num = count_triangles(graph, tnum);
   gettimeofday(&calc_t, NULL);
-  double calc_time = (calc_t.tv_sec - graph_t.tv_sec) +
-                     (calc_t.tv_usec - graph_t.tv_usec) / 1000000.0;
-  printf("计数时间: %fs\n", calc_time);
+  double calc_time = (calc_t.tv_sec - graph_t.tv_sec) + (calc_t.tv_usec - graph_t.tv_usec) / 1000000.0;
+  // printf("计数时间: %fs\n", calc_time);
   printf("三角形数量: %lu\n", tri_num);
-
+	
   printf("总时间: %fs\n", (graph_time + calc_time));
   return 0;
 }

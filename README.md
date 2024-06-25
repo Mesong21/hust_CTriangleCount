@@ -6,15 +6,15 @@
 cd build
 cmake ..
 make
-./count [r]
+./mesongcount /your/dir thread-num if-print
 ```
 
 参数说明：
 
 - 必选
 
-- r: 运行大数据
+- /your/dir: 数据文件夹路径
 
-- mt: 我的测试小图
+- thread-num: 线程数，根据机器核心数取值
 
-- t1: 测试大图
+- if-print: 范围: 0/1，是否打印构建的图，建议不打印大图

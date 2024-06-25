@@ -20,7 +20,6 @@ typedef struct Vertex {
   }
 
 } Vertex;
-// typedef std::map<unsigned long, Vertex> VertexList;
 typedef std::unordered_map<unsigned long, Vertex *> VertexList;
 
 typedef struct Edge {
@@ -28,7 +27,6 @@ typedef struct Edge {
   Vertex *src_v;
   Vertex *dst_v;
 } Edge;
-// typedef std::map<unsigned long, Edge> EdgeList;
 typedef std::unordered_map<unsigned long, Edge *> EdgeList;
 
 typedef struct Graph {

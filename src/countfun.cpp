@@ -7,6 +7,7 @@
 #include <set>
 #include <stdexcept>
 #include <thread>
+#include <sys/time.h>
 std::mutex mtx;  // 互斥锁
 
 void process_edges(Graph *graph,
@@ -66,8 +67,21 @@ unsigned long add_vertexes(Graph *graph) {
 }
 
 unsigned long count_triangles(Graph *graph, int tnum) {
-  edges_to_vertexes(graph, tnum);
+	struct timeval start_t, proc_t, clac_t;
+	gettimeofday(&start_t, NULL);
+  edges_to_vertexes(graph, tnum); // 传播信息
+	gettimeofday(&proc_t, NULL);
+	double pro_time = (proc_t.tv_sec - start_t.tv_sec) +
+											(proc_t.tv_usec - start_t.tv_usec) / 1000000.0;
+	printf("   |传播时间: %fs\n", pro_time);
   unsigned long tri_num;
   tri_num = add_vertexes(graph);
+	gettimeofday(&clac_t, NULL);
+	double clac_time = (clac_t.tv_sec - proc_t.tv_sec) +
+											(clac_t.tv_usec - proc_t.tv_usec) / 1000000.0;
+	printf("   |累加计数时间: %fs\n", clac_time);
+	double total_time = (clac_t.tv_sec - start_t.tv_sec) +
+											(clac_t.tv_usec - start_t.tv_usec) / 1000000.0;
+	printf(" |总计算时间: %fs\n", total_time);
   return tri_num;
 }
