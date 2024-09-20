@@ -146,7 +146,7 @@ bool find_edge(unsigned long id1, unsigned long id2, Graph *g) {
 }
 
 void print_graph(Graph *graph, bool print_all) {
-  printf("顶点数：%lu 无向边数: %lu \n", graph->vertex_num, graph->edge_num);
+  printf("vertex num：%lu undirected edge num: %lu \n", graph->vertex_num, graph->edge_num);
 	// printf("有向边数: %lu\n", graph->directed_edge_num);
   // 顶点信息
   if (print_all) {
@@ -173,16 +173,16 @@ void print_edge_list(std::unordered_map<unsigned long, Edge *> &edge_list) {
 }
 
 inline void print_vertex(Vertex *vertex) {
-  printf("顶点id: %lu  ", vertex->id);
-  printf("邻居数：%lu  ", vertex->nbr_set.size());
+  printf("vertex_id: %lu  ", vertex->id);
+  printf("neighbor num: %lu  ", vertex->nbr_set.size());
   for (auto &nbr : vertex->nbr_set) {
-    printf("邻居id: %lu ", nbr);
+    printf("neighbor_id: %lu ", nbr);
   }
   printf("\n");
 }
 
 inline void print_edge(Edge *edge) {
-  printf("边id: %lu ", edge->id);
+  printf("edge_id: %lu ", edge->id);
   printf("src: %lu -> ", edge->src_v->id);
   printf("dst: %lu\n", edge->dst_v->id);
 }

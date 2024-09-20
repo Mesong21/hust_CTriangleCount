@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <thread>
 #include <sys/time.h>
+#include <vector>
 std::mutex mtx;  // 互斥锁
 
 void process_edges(Graph *graph,
@@ -61,7 +62,7 @@ unsigned long add_vertexes(Graph *graph) {
     total_num += tri_num;
   }
   if (total_num % 3 != 0) {
-    throw std::runtime_error("不是3的倍数!\n");
+    throw std::runtime_error("not a multiple of 3!\n");
   }
   return total_num / 3;
 }
@@ -73,15 +74,15 @@ unsigned long count_triangles(Graph *graph, int tnum) {
 	gettimeofday(&proc_t, NULL);
 	double pro_time = (proc_t.tv_sec - start_t.tv_sec) +
 											(proc_t.tv_usec - start_t.tv_usec) / 1000000.0;
-	printf("   |传播时间: %fs\n", pro_time);
+	printf("   |transmit time: %fs\n", pro_time);
   unsigned long tri_num;
   tri_num = add_vertexes(graph);
 	gettimeofday(&clac_t, NULL);
 	double clac_time = (clac_t.tv_sec - proc_t.tv_sec) +
 											(clac_t.tv_usec - proc_t.tv_usec) / 1000000.0;
-	printf("   |累加计数时间: %fs\n", clac_time);
+	printf("   |calc time: %fs\n", clac_time);
 	double total_time = (clac_t.tv_sec - start_t.tv_sec) +
 											(clac_t.tv_usec - start_t.tv_usec) / 1000000.0;
-	printf(" |总计算时间: %fs\n", total_time);
+	printf(" |total calc time: %fs\n", total_time);
   return tri_num;
 }
